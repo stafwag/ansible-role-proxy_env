@@ -1,7 +1,6 @@
 - name: add proxy to /usr/local/etc/pkg.conf
   blockinfile:
     path: /usr/local/etc/pkg.conf
-
     block: |
       pkg_env: {
         http_proxy: "{{ proxy.env }}"

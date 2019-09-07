@@ -1,7 +1,5 @@
-
 - name: enable proxy in /etc/sysconfig/proxy
   block:
-
   - name: enable proxy for protocols
     lineinfile:
       path: /etc/sysconfig/proxy
@@ -11,7 +9,6 @@
       '{{ proxy.protocols | default(_default_protocols) }}'
     loop_control:
       loop_var: protocol
-
   - name: enable proxy in /etc/sysconfig/proxy
     lineinfile:
       path: /etc/sysconfig/proxy
@@ -22,7 +19,6 @@
 
 - name: enable proxy in /etc/sysconfig/proxy
   block:
-
   - name: disable proxy for protocols
     lineinfile:
       path: /etc/sysconfig/proxy
@@ -32,7 +28,6 @@
       '{{ proxy.protocols | default(_default_protocols) }}'
     loop_control:
       loop_var: protocol
-
   - name: disable proxy in /etc/sysconfig/proxy
     lineinfile:
       path: /etc/sysconfig/proxy
