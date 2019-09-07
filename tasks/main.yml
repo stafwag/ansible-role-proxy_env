@@ -15,7 +15,7 @@
   include_tasks: setup_etc_profile.yml
   when:
     - etc_profile.stat.exists
-    - proxy.etc_profile_config != false
+    - proxy.etc_profile_config
 
 - name: verify /etc/csh.cshrc
   stat:
@@ -25,7 +25,7 @@
   include_tasks: setup_etc_csh_cshrc.yml
   when:
     - etc_csh_cshrc.stat.exists
-    - proxy.etc_csh_cshrc_config != false
+    - proxy.etc_csh_cshrc_config
 
 - name: execute OS related tasks
   include_tasks: "{{ item }}"
@@ -36,4 +36,4 @@
     - 'pkg_mgr_config/{{ ansible_os_family }}.yml'
     - 'pkg_mgr_config/default.yml'
   when:
-   - proxy.pkg_mgr_config != false
+   - proxy.pkg_mgr_config

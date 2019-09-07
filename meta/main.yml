@@ -2,7 +2,6 @@ galaxy_info:
   role_name: proxy_env
   author: staf wagemakers <staf@wagemakers.be>
   description: An ansible role to setup the proxy settings in shell environments and package managers.
-  company: your company (optional)
   license: license (BSD, MIT)
   min_ansible_version: 2.4
   platforms:
@@ -36,4 +35,4 @@ galaxy_info:
   galaxy_tags:
     - system
     - proxy
-dependencies: [] 
+dependencies: []

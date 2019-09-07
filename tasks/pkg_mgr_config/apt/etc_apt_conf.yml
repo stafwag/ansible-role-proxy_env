@@ -1,5 +1,5 @@
 - name: add proxy to /etc/apt/apt.conf
-  lineinfile: 
+  lineinfile:
     path: /etc/apt/apt.conf
     line: 'Acquire::{{ protocol }}::Proxy "{{ proxy.env }}";'
   with_items:

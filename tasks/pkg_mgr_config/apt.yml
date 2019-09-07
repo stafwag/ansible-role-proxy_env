@@ -19,9 +19,9 @@
 - name: configure /etc/apt/apt.conf.d
   import_tasks: apt/etc_apt_conf_d_proxy.yml
   when:
-    use_apt_conf_d == True
+    use_apt_conf_d
 
 - name: configure /etc/apt/apt.conf
   import_tasks: apt/etc_apt_conf.yml
   when:
-    use_apt_conf_d == False
+    not use_apt_conf_d
