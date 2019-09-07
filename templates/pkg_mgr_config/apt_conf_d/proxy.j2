@@ -1,0 +1,9 @@
+#jinja2: trim_blocks:False
+#
+# {{ ansible_managed }}
+# 
+Acquire {
+{%- for protocol in proxy.protocols %}
+  {{ protocol }}::Proxy "{{ proxy.env }}";
+{%- endfor %}
+}

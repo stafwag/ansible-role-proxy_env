@@ -1,0 +1,27 @@
+- name: verify if /etc/apt/apt.conf.d exists
+  stat:
+    path: /etc/apt/apt.conf.d
+  register: apt_conf_d
+
+- name: set the use_apt_conf_d
+  set_fact:
+    use_apt_conf_d: yes
+  when:
+    - apt_conf_d.stat.exists
+    - apt_conf_d.stat.isdir
+
+- name: set the use_apt_conf_d to false
+  set_fact:
+    use_apt_conf_d: no
+  when:
+    use_apt_conf_d is undefined
+
+- name: configure /etc/apt/apt.conf.d
+  import_tasks: apt/etc_apt_conf_d_proxy.yml
+  when:
+    use_apt_conf_d == True
+
+- name: configure /etc/apt/apt.conf
+  import_tasks: apt/etc_apt_conf.yml
+  when:
+    use_apt_conf_d == False

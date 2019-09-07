@@ -1,0 +1,27 @@
+- name: add proxy to /usr/local/etc/pkg.conf
+  blockinfile:
+    path: /usr/local/etc/pkg.conf
+
+    block: |
+      pkg_env: {
+        http_proxy: "{{ proxy.env }}"
+      }
+  when:
+    proxy.env != 'absent'
+
+- name: remove proxy from /usr/local/etc/pkg.conf
+  block:
+    - lineinfile:
+        path: /usr/local/etc/pkg.conf
+        regexp: ".*http_proxy:"
+        state: absent
+    - replace:
+        path: /usr/local/etc/pkg.conf
+        regexp: '# BEGIN ANSIBLE MANAGED BLOCK\n*.*pkg_env: {\n*\s*}\s*\n*# END ANSIBLE MANAGED BLOCK'
+        replace: ''
+    - replace:
+        path: /usr/local/etc/pkg.conf
+        regexp: '.*pkg_env: {\n*\s*}\s*'
+        replace: ''
+  when:
+    proxy.env == 'absent'

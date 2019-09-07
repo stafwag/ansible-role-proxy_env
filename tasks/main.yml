@@ -1,0 +1,39 @@
+---
+# tasks file for proxy_env
+
+- name: set proxy.protocols to default
+  set_fact:
+    proxy: "{{ proxy | combine( { 'protocols': '{{ _default_protocols }}' } ) }}"
+  when: proxy.protocols is not defined
+
+- name: verify /etc/profile
+  stat:
+    path: /etc/profile
+  register: etc_profile
+
+- name: configure /etc/profile
+  include_tasks: setup_etc_profile.yml
+  when:
+    - etc_profile.stat.exists
+    - proxy.etc_profile_config != false
+
+- name: verify /etc/csh.cshrc
+  stat:
+     path: /etc/csh.cshrc
+  register: etc_csh_cshrc
+- name: configure /etc/csh.cshrc
+  include_tasks: setup_etc_csh_cshrc.yml
+  when:
+    - etc_csh_cshrc.stat.exists
+    - proxy.etc_csh_cshrc_config != false
+
+- name: execute OS related tasks
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - 'pkg_mgr_config/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
+    - 'pkg_mgr_config/{{ ansible_pkg_mgr }}.yml'
+    - 'pkg_mgr_config/{{ ansible_distribution }}.yml'
+    - 'pkg_mgr_config/{{ ansible_os_family }}.yml'
+    - 'pkg_mgr_config/default.yml'
+  when:
+   - proxy.pkg_mgr_config != false

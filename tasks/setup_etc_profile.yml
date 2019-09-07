@@ -1,0 +1,8 @@
+- name: setup proxy in /etc/profile
+  include_tasks: set_etc_profile.yml
+  when:
+   - proxy.env != 'absent'
+- name: remove proxy setup from /etc/profile
+  include_tasks: unset_etc_profile.yml
+  when:
+    - proxy.env == 'absent'

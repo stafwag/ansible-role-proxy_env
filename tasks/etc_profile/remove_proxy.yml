@@ -1,0 +1,10 @@
+- name: remove proxy to /etc/profile
+  lineinfile:
+    path: /etc/profile
+    regexp: '^.*{{ item }}_proxy.*=.*'
+    state: absent
+- name: remove proxy export to /etc/profile
+  lineinfile:
+    path: /etc/profile
+    regexp: '^.*export {{ item }}_proxy'
+    state: absent

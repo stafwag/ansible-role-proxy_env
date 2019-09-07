@@ -1,0 +1,17 @@
+- name: enable proxy in /etc/pacman.conf
+  ini_file:
+    path: /etc/pacman.conf
+    section: options
+    option: XferCommand
+    value: '/usr/bin/curl -C - -f %u > %o --proxy {{ proxy.env }}'
+  when:
+    proxy.env != 'absent'
+
+- name: disable proxy in /etc/pacman.conf
+  ini_file:
+    path: /etc/pacman.conf
+    section: options
+    option: XferCommand
+    state: absent
+  when:
+    proxy.env == 'absent'

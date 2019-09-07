@@ -1,0 +1,22 @@
+- name: add proxy to /etc/apt/apt.conf
+  lineinfile: 
+    path: /etc/apt/apt.conf
+    line: 'Acquire::{{ protocol }}::Proxy "{{ proxy.env }}";'
+  with_items:
+    '{{ proxy.protocols | default(_default_protocols) }}'
+  loop_control:
+    loop_var: protocol
+  when:
+    proxy.env != 'absent'
+
+- name: remove proxy from /etc/apt/apt.conf
+  lineinfile:
+    path: /etc/apt/apt.conf
+    regexp: "^.*Acquire::{{ protocol }}::Proxy.*"
+    state: absent
+  with_items:
+    '{{ proxy.protocols | default(_default_protocols) }}'
+  loop_control:
+    loop_var: protocol
+  when:
+    proxy.env == 'absent'

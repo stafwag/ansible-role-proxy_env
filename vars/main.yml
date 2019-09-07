@@ -1,0 +1,7 @@
+---
+# vars file for proxy_env
+
+_default_protocols:
+   - http
+   - https
+   - ftp

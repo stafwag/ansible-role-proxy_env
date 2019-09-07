@@ -1,0 +1,4 @@
+---
+- name: set proxy in /etc/profile
+  include_tasks: etc_profile/add_proxy.yml
+  with_items: '{{ proxy.protocols | default(_default_protocols) }}'

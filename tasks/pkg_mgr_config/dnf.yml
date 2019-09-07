@@ -1,0 +1,17 @@
+- name: enable proxy in /etc/dnf/dnf.conf
+  ini_file:
+    path: /etc/dnf/dnf.conf
+    section: main
+    option: proxy
+    value: '{{ proxy.env }}'
+  when:
+    proxy.env != 'absent'
+
+- name: disable proxy in /etc/dnf/dnf.conf
+  ini_file:
+    path: /etc/dnf/dnf.conf
+    section: main
+    option: proxy
+    state: absent
+  when:
+    proxy.env == 'absent'

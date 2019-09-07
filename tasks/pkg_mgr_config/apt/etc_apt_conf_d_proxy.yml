@@ -1,0 +1,9 @@
+- name: configure /etc/apt/conf.d/099proxy.conf
+  template:
+    src:
+      pkg_mgr_config/apt_conf_d/proxy.j2
+    dest:
+      /etc/apt/apt.conf.d/99proxy.conf
+    owner: root
+    group: root
+    mode: 0444

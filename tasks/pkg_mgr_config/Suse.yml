@@ -1,0 +1,42 @@
+
+- name: enable proxy in /etc/sysconfig/proxy
+  block:
+
+  - name: enable proxy for protocols
+    lineinfile:
+      path: /etc/sysconfig/proxy
+      regexp: '^.*{{ protocol| upper}}_PROXY='
+      line: '{{ protocol | upper}}_PROXY="{{ proxy.env }}"'
+    with_items:
+      '{{ proxy.protocols | default(_default_protocols) }}'
+    loop_control:
+      loop_var: protocol
+
+  - name: enable proxy in /etc/sysconfig/proxy
+    lineinfile:
+      path: /etc/sysconfig/proxy
+      regexp: '^PROXY_ENABLED='
+      line: 'PROXY_ENABLED="yes"'
+  when:
+    proxy.env != 'absent' 
+
+- name: enable proxy in /etc/sysconfig/proxy
+  block:
+
+  - name: disable proxy for protocols
+    lineinfile:
+      path: /etc/sysconfig/proxy
+      regexp: '^.*{{ protocol | upper}}_PROXY='
+      line: '{{ protocol | upper}}_PROXY=""'
+    with_items:
+      '{{ proxy.protocols | default(_default_protocols) }}'
+    loop_control:
+      loop_var: protocol
+
+  - name: disable proxy in /etc/sysconfig/proxy
+    lineinfile:
+      path: /etc/sysconfig/proxy
+      regexp: '^PROXY_ENABLED='
+      line: 'PROXY_ENABLED="no"'
+  when:
+    proxy.env == 'absent' 

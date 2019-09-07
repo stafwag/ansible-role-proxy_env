@@ -1,0 +1,5 @@
+- name: remove proxy to /etc/csh.cshrc
+  lineinfile:
+    path: /etc/csh.cshrc
+    regexp: '^setenv.*{{ item }}_proxy.*'
+    state: absent
