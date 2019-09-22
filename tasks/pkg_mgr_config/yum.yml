@@ -3,9 +3,9 @@
     path: /etc/yum.conf
     section: main
     option: proxy
-    value: '{{ proxy.env }}'
+    value: '{{ proxy.pkg_mgr_proxy }}'
   when:
-    proxy.env != 'absent'
+    proxy.pkg_mgr_proxy != 'absent'
 
 - name: disable proxy in /etc/yum.conf
   ini_file:
@@ -14,4 +14,4 @@
     option: proxy
     state: absent
   when:
-    proxy.env == 'absent'
+    proxy.pkg_mgr_proxy == 'absent'

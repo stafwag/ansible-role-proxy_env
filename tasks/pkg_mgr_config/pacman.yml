@@ -3,9 +3,9 @@
     path: /etc/pacman.conf
     section: options
     option: XferCommand
-    value: '/usr/bin/curl -C - -f %u > %o --proxy {{ proxy.env }}'
+    value: '/usr/bin/curl -C - -f %u > %o --proxy {{ proxy.pkg_mgr_proxy }}'
   when:
-    proxy.env != 'absent'
+    proxy.pkg_mgr_proxy != 'absent'
 
 - name: disable proxy in /etc/pacman.conf
   ini_file:
@@ -14,4 +14,4 @@
     option: XferCommand
     state: absent
   when:
-    proxy.env == 'absent'
+    proxy.pkg_mgr_proxy == 'absent'

@@ -1,0 +1,6 @@
+---
+- name: set no_proxy in /etc/csh.cshrc
+  lineinfile:
+    path: /etc/csh.cshrc
+    regexp: '^.*setenv no_proxy.*'
+    line: 'setenv no_proxy {{ proxy.etc_csh_cshrc_no_proxy }}'

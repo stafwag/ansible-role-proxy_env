@@ -1,4 +1,4 @@
 ---
 - name: set proxy in /etc/csh.cshrc
-  include_tasks: etc_csh_cshrc/add_proxy.yml
+  include_tasks: add_proxy.yml
   with_items: '{{ proxy.protocols | default(_default_protocols) }}'

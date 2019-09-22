@@ -1,4 +1,4 @@
-- name: configure /etc/apt/conf.d/099proxy.conf
+- name: configure /etc/apt/conf.d/99proxy.conf
   template:
     src:
       pkg_mgr_config/apt_conf_d/proxy.j2
@@ -7,3 +7,12 @@
     owner: root
     group: root
     mode: 0444
+  when:
+    proxy.pkg_mgr_proxy != 'absent'
+
+- name: remove /etc/apt/conf.d/99proxy.conf
+  file:
+    path: /etc/apt/apt.conf.d/99proxy.conf
+    state: absent
+  when:
+    proxy.pkg_mgr_proxy == 'absent'

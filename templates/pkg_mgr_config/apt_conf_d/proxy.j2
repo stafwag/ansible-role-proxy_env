@@ -4,6 +4,6 @@
 # 
 Acquire {
 {%- for protocol in proxy.protocols %}
-  {{ protocol }}::Proxy "{{ proxy.env }}";
+  {{ protocol }}::Proxy "{{ proxy.pkg_mgr_proxy }}";
 {%- endfor %}
 }

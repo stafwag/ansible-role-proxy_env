@@ -1,0 +1,8 @@
+- name: setup no_proxy in /etc/csh.cshrc
+  include_tasks: etc_csh_cshrc/set_etc_csh_cshrc_no_proxy.yml
+  when:
+    proxy.etc_csh_cshrc_no_proxy != 'absent'
+- name: remove no_proxy setup from /etc/csh.cshrc
+  include_tasks: etc_csh_cshrc/unset_etc_csh_cshrc_no_proxy.yml
+  when:
+    proxy.etc_csh_cshrc_no_proxy == 'absent'

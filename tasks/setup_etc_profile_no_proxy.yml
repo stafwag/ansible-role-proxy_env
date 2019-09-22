@@ -1,0 +1,8 @@
+- name: setup no_proxy in /etc/profile
+  include_tasks: etc_profile/set_etc_profile_no_proxy.yml
+  when:
+    proxy.etc_profile_no_proxy != 'absent'
+- name: remove no_proxy setup from /etc/profile
+  include_tasks: etc_profile/unset_etc_profile_no_proxy.yml
+  when:
+    proxy.etc_profile_no_proxy == 'absent'

@@ -3,10 +3,10 @@
     path: /usr/local/etc/pkg.conf
     block: |
       pkg_env: {
-        http_proxy: "{{ proxy.env }}"
+        http_proxy: "{{ proxy.pkg_mgr_proxy }}"
       }
   when:
-    proxy.env != 'absent'
+    proxy.pkg_mgr_proxy != 'absent'
 
 - name: remove proxy from /usr/local/etc/pkg.conf
   block:
@@ -23,4 +23,4 @@
         regexp: '.*pkg_env: {\n*\s*}\s*'
         replace: ''
   when:
-    proxy.env == 'absent'
+    proxy.pkg_mgr_proxy == 'absent'

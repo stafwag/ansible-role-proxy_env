@@ -1,6 +1,5 @@
 # Ansible Role: proxy env 
-An ansible role to setup the proxy settings in shell environment ( /etc/profile & /etc/csh_cshrc )
-and the package manager. The following package managers are supported: 
+An ansible role to setup the proxy environment in shell environment ( /etc/profile & /etc/csh_cshrc ) and the package manager. The following package managers are supported: 
 
 * apt
 * pacman
@@ -17,11 +16,23 @@ None
 ### Playbook related variables
 
 * **proxy**:
-  * **env**: the proxy setting.
+  * **env**: false (default) / text / absent. The proxy variable.
+  * **no_proxy**:  false (default) / text / absent  The no_proxy variable. 
   * **protocols**: Array with the protocols to configure. Defaults ( - http, - https,  - ftp ) 
-  * **etc_profile_config**: false / true (default) 
-  * **etc_csh_cshrc_config**: false / true (default)
-  * **pkg_mgr_config**: false / true (default) 
+  * **etc_profile_proxy**: false / {{ proxy.env }} (default) / absent.
+  * **etc_profile_no_proxy**: false / {{ proxy.no_proxy }} (default) / absent.
+  * **etc_csh_cshrc_proxy**: false / {{ proxy.env }} (default) / absent.
+  * **etc_csh_cshrc_no_proxy**: false / {{ proxy.no_proxy }} (default) / absent.
+  * **pkg_mgr_proxy**: false / {{ proxy.env }} (default) / absent.
+
+Proxy setting variables;
+
+  * **false or undef:**
+    The no_proxy/proxy environment are not altered.
+  * **text:**
+    The no_proxy/proxy environment are updated to text. 
+  * **absent:**
+    The no_proxy/proxy environment is removed
 
 ## Dependencies
 
@@ -29,17 +40,30 @@ None
 
 ## Example Playbooks
 
-### Configure the proxy in the pkg_mgr  
-
+### Configure the proxy environment
+ 
 ```
-- name: setup proxy
-  hosts: all
+- name: setup proxy on internal hosts
+  hosts: all:!dmz:!k8s
   become: true
   vars:
     proxy:
-      env: "http://proxyhost:3128"
-      etc_csh_cshrc_config: no
-      etc_profile_config: no
+      env: "http://192.168.1.45:3128"
+  roles:
+    - stafwag.proxy_env
+```
+
+### Configure the proxy in the pkg_mgr, and remove it from the shell environment.  
+
+```
+- name: setup proxy on k8s hosts
+  hosts: k8s
+  become: true
+  vars:
+    proxy:
+      etc_csh_cshrc_proxy: absent
+      etc_profile_proxy: absent
+      pkg_mgr_proxy: http://192.168.1.45:3128
   roles:
     - stafwag.proxy_env
 ```
@@ -47,7 +71,7 @@ None
 ### Remove the proxy settings
 
 ```
-- name: remove proxy from shell environment
+- name: setup proxy
   hosts: all
   become: true
   vars:

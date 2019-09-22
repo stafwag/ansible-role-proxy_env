@@ -1,8 +1,8 @@
 - name: add proxy to /etc/profile
   lineinfile:
     path: /etc/profile
-    regexp: '^.*{{ item }}_proxy.*=.*{{ proxy.env }}'
-    line: '{{ item }}_proxy={{ proxy.env }}'
+    regexp: '^.*{{ item }}_proxy.*=.*{{ proxy.etc_profile_proxy }}'
+    line: '{{ item }}_proxy={{ proxy.etc_profile_proxy }}'
 - name: add proxy export to /etc/profile
   lineinfile:
     path: /etc/profile

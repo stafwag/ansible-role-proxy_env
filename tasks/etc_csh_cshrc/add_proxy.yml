@@ -1,5 +1,5 @@
 - name: add proxy to /etc/csh.cshrc
   lineinfile:
     path: /etc/csh.cshrc
-    regexp: '^.*setenv {{ item }}_proxy.* .*{{ proxy.env }}'
-    line: 'setenv {{ item }}_proxy {{ proxy.env }}'
+    regexp: '^.*setenv {{ item }}_proxy.* .*{{ proxy.etc_csh_cshrc_proxy }}'
+    line: 'setenv {{ item }}_proxy {{ proxy.etc_csh_cshrc_proxy }}'

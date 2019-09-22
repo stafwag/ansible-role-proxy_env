@@ -1,0 +1,11 @@
+---
+- name: set no_proxy in /etc/profile
+  lineinfile:
+    path: /etc/profile
+    regexp: '^.*no_proxy.*=.*'
+    line: 'no_proxy={{ proxy.etc_profile_no_proxy }}'
+- name: add export no_proxy to /etc/profile
+  lineinfile:
+    path: /etc/profile
+    regexp: '^.*export no_proxy'
+    line: 'export no_proxy'

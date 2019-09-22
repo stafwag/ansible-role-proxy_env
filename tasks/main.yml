@@ -1,10 +1,48 @@
 ---
 # tasks file for proxy_env
 
-- name: set proxy.protocols to default
+- name: set _proxy_env
+  set_fact:
+    _proxy_env: '{{ proxy.env | default(false) }}'
+
+- name: set _no_proxy
+  set_fact:
+    _no_proxy: '{{ proxy.no_proxy | default(false) }}'
+
+- name: set proxy.no_proxy to default
+  set_fact:
+    proxy: "{{ proxy | combine( { 'no_proxy': '{{ _no_proxy }}' } ) }}"
+  when: proxy.no_proxy is not defined
+
+- name: set protocols to defaults
   set_fact:
     proxy: "{{ proxy | combine( { 'protocols': '{{ _default_protocols }}' } ) }}"
   when: proxy.protocols is not defined
+
+- name: set proxy.etc_profile_proxy to default
+  set_fact:
+    proxy: "{{ proxy | combine( { 'etc_profile_proxy': '{{ _proxy_env }}' } ) }}"
+  when: proxy.etc_profile_proxy is not defined
+
+- name: set proxy.etc_profile_no_proxy to default
+  set_fact:
+    proxy: "{{ proxy | combine( { 'etc_profile_no_proxy': '{{ _no_proxy }}' } ) }}"
+  when: proxy.etc_profile_no_proxy is not defined
+
+- name: set proxy.etc_csh_cshrc_proxy to default
+  set_fact:
+    proxy: "{{ proxy | combine( { 'etc_csh_cshrc_proxy': '{{ _proxy_env }}' } ) }}"
+  when: proxy.etc_csh_cshrc_proxy is not defined
+
+- name: set proxy.etc_csh_cshrc_no_proxy to default
+  set_fact:
+    proxy: "{{ proxy | combine( { 'etc_csh_cshrc_no_proxy': '{{ _no_proxy }}' } ) }}"
+  when: proxy.etc_csh_cshrc_no_proxy is not defined
+
+- name: set proxy.pkg_mgr_proxy to default
+  set_fact:
+    proxy: "{{ proxy | combine( { 'pkg_mgr_proxy': '{{ _proxy_env }}' } ) }}"
+  when: proxy.pkg_mgr_proxy is not defined
 
 - name: verify /etc/profile
   stat:
@@ -12,20 +50,33 @@
   register: etc_profile
 
 - name: configure /etc/profile
-  include_tasks: setup_etc_profile.yml
+  include_tasks: setup_etc_profile_proxy.yml
   when:
     - etc_profile.stat.exists
-    - proxy.etc_profile_config
+    - proxy.etc_profile_proxy
+
+- name: configure /etc/profile
+  include_tasks: setup_etc_profile_no_proxy.yml
+  when:
+    - etc_profile.stat.exists
+    - proxy.etc_profile_no_proxy
 
 - name: verify /etc/csh.cshrc
   stat:
      path: /etc/csh.cshrc
   register: etc_csh_cshrc
+
 - name: configure /etc/csh.cshrc
-  include_tasks: setup_etc_csh_cshrc.yml
+  include_tasks: setup_etc_csh_cshrc_proxy.yml
   when:
     - etc_csh_cshrc.stat.exists
-    - proxy.etc_csh_cshrc_config
+    - proxy.etc_csh_cshrc_proxy
+
+- name: configure /etc/csh.cshrc
+  include_tasks: setup_etc_csh_cshrc_no_proxy.yml
+  when:
+    - etc_csh_cshrc.stat.exists
+    - proxy.etc_csh_cshrc_no_proxy
 
 - name: execute OS related tasks
   include_tasks: "{{ item }}"
@@ -36,4 +87,4 @@
     - 'pkg_mgr_config/{{ ansible_os_family }}.yml'
     - 'pkg_mgr_config/default.yml'
   when:
-   - proxy.pkg_mgr_config
+   - proxy.pkg_mgr_proxy
