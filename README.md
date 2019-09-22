@@ -48,7 +48,7 @@ None
   become: true
   vars:
     proxy:
-      env: "http://192.168.1.45:3128"
+      env: "http://proxy:3128"
   roles:
     - stafwag.proxy_env
 ```
@@ -61,9 +61,9 @@ None
   become: true
   vars:
     proxy:
-      etc_csh_cshrc_proxy: absent
-      etc_profile_proxy: absent
-      pkg_mgr_proxy: http://192.168.1.45:3128
+      env: absent
+      no_proxy: absent
+      pkg_mgr_proxy: http://proxy:3128
   roles:
     - stafwag.proxy_env
 ```
