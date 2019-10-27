@@ -3,7 +3,7 @@
     path: /etc/pacman.conf
     section: options
     option: XferCommand
-    value: '/usr/bin/curl -C - -f %u > %o --proxy {{ proxy.pkg_mgr_proxy }}'
+    value: '/usr/bin/curl -L -C - -f -o %o %u -x {{ proxy.pkg_mgr_proxy }}'
   when:
     proxy.pkg_mgr_proxy != 'absent'
 
