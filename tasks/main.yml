@@ -11,37 +11,37 @@
 
 - name: set proxy.no_proxy to default
   set_fact:
-    proxy: "{{ proxy | combine( { 'no_proxy': '{{ _no_proxy }}' } ) }}"
+    proxy: "{{ proxy | combine( { 'no_proxy': _no_proxy  } ) }}"
   when: proxy.no_proxy is not defined
 
 - name: set protocols to defaults
   set_fact:
-    proxy: "{{ proxy | combine( { 'protocols': '{{ _default_protocols }}' } ) }}"
+    proxy: "{{ proxy | combine( { 'protocols': _default_protocols } ) }}"
   when: proxy.protocols is not defined
 
 - name: set proxy.etc_profile_proxy to default
   set_fact:
-    proxy: "{{ proxy | combine( { 'etc_profile_proxy': '{{ _proxy_env }}' } ) }}"
+    proxy: "{{ proxy | combine( { 'etc_profile_proxy': _proxy_env  } ) }}"
   when: proxy.etc_profile_proxy is not defined
 
 - name: set proxy.etc_profile_no_proxy to default
   set_fact:
-    proxy: "{{ proxy | combine( { 'etc_profile_no_proxy': '{{ _no_proxy }}' } ) }}"
+    proxy: "{{ proxy | combine( { 'etc_profile_no_proxy': _no_proxy } ) }}"
   when: proxy.etc_profile_no_proxy is not defined
 
 - name: set proxy.etc_csh_cshrc_proxy to default
   set_fact:
-    proxy: "{{ proxy | combine( { 'etc_csh_cshrc_proxy': '{{ _proxy_env }}' } ) }}"
+    proxy: "{{ proxy | combine( { 'etc_csh_cshrc_proxy': _proxy_env } ) }}"
   when: proxy.etc_csh_cshrc_proxy is not defined
 
 - name: set proxy.etc_csh_cshrc_no_proxy to default
   set_fact:
-    proxy: "{{ proxy | combine( { 'etc_csh_cshrc_no_proxy': '{{ _no_proxy }}' } ) }}"
+    proxy: "{{ proxy | combine( { 'etc_csh_cshrc_no_proxy': _no_proxy } ) }}"
   when: proxy.etc_csh_cshrc_no_proxy is not defined
 
 - name: set proxy.pkg_mgr_proxy to default
   set_fact:
-    proxy: "{{ proxy | combine( { 'pkg_mgr_proxy': '{{ _proxy_env }}' } ) }}"
+    proxy: "{{ proxy | combine( { 'pkg_mgr_proxy': _proxy_env } ) }}"
   when: proxy.pkg_mgr_proxy is not defined
 
 - name: verify /etc/profile
