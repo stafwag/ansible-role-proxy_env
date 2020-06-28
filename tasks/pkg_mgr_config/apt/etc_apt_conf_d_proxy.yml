@@ -1,3 +1,9 @@
+- name: remove proxy from apt.conf
+  lineinfile:
+    path: /etc/apt/apt.conf
+    state: absent
+    regexp: ^\s*Acquire::http::Proxy
+
 - name: configure /etc/apt/conf.d/99proxy.conf
   template:
     src:
