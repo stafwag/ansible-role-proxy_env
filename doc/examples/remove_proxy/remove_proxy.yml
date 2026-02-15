@@ -1,0 +1,9 @@
+---
+- name: setup proxy
+  hosts: all
+  become: true
+  vars:
+    proxy:
+      env: absent
+  roles:
+    - stafwag.proxy_env
