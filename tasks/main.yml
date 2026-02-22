@@ -49,17 +49,31 @@
     path: /etc/profile
   register: etc_profile
 
+- name: Debug show etc_profile
+  debug:
+    var: etc_profile
+  tags:
+    - never
+    - debug
+
+- name: Debug show proxy
+  debug:
+    var: proxy
+  tags:
+    - never
+    - debug
+
 - name: configure /etc/profile
   include_tasks: setup_etc_profile_proxy.yml
   when:
     - etc_profile.stat.exists
-    - proxy.etc_profile_proxy
+    - proxy.etc_profile_proxy is defined
 
 - name: configure /etc/profile
   include_tasks: setup_etc_profile_no_proxy.yml
   when:
     - etc_profile.stat.exists
-    - proxy.etc_profile_no_proxy
+    - proxy.etc_profile_no_proxy is defined
 
 - name: verify /etc/csh.cshrc
   stat:
@@ -70,13 +84,13 @@
   include_tasks: setup_etc_csh_cshrc_proxy.yml
   when:
     - etc_csh_cshrc.stat.exists
-    - proxy.etc_csh_cshrc_proxy
+    - proxy.etc_csh_cshrc_proxy is defined
 
 - name: configure /etc/csh.cshrc
   include_tasks: setup_etc_csh_cshrc_no_proxy.yml
   when:
     - etc_csh_cshrc.stat.exists
-    - proxy.etc_csh_cshrc_no_proxy
+    - proxy.etc_csh_cshrc_no_proxy is defined
 
 - name: execute OS related tasks
   include_tasks: "{{ item }}"
@@ -87,4 +101,4 @@
     - 'pkg_mgr_config/{{ ansible_os_family }}.yml'
     - 'pkg_mgr_config/default.yml'
   when:
-   - proxy.pkg_mgr_proxy
+   - proxy.pkg_mgr_proxy | default('false') | bool
