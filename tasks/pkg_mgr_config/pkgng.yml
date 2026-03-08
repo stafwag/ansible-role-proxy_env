@@ -1,4 +1,21 @@
 ---
+- name: Verify if /usr/local/etc/pkg.conf exists
+  stat:
+    path: /usr/local/etc/pkg.conf
+  register:
+    etc_local_pkg_conf
+
+- name: Ensure that /usr/local/etc/pkg.conf exists
+  file:
+    path: /usr/local/etc/pkg.conf
+    state: touch
+    mode: "0644"
+    owner: root
+    group: wheel
+  when:
+    - proxy.pkg_mgr_proxy != 'absent'
+    - not etc_local_pkg_conf.stat.exists
+
 - name: Add proxy to /usr/local/etc/pkg.conf
   blockinfile:
     path: /usr/local/etc/pkg.conf
@@ -27,4 +44,5 @@
         regexp: '.*pkg_env: {\n*\s*}\s*'
         replace: ''
   when:
-    proxy.pkg_mgr_proxy == 'absent'
+    - proxy.pkg_mgr_proxy == 'absent'
+    - etc_local_pkg_conf.stat.exists
