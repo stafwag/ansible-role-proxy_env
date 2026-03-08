@@ -92,13 +92,21 @@
     - etc_csh_cshrc.stat.exists
     - proxy.etc_csh_cshrc_no_proxy | default(false) | lower not in ['false']
 
+- name: Show ansible_facts dict
+  debug:
+    var:
+      ansible_facts
+  tags:
+    - never
+    - debug
+
 - name: execute OS related tasks
   include_tasks: "{{ item }}"
   with_first_found:
-    - 'pkg_mgr_config/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
-    - 'pkg_mgr_config/{{ ansible_pkg_mgr }}.yml'
-    - 'pkg_mgr_config/{{ ansible_distribution }}.yml'
-    - 'pkg_mgr_config/{{ ansible_os_family }}.yml'
-    - 'pkg_mgr_config/default.yml'
+    - "pkg_mgr_config/{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
+    - "pkg_mgr_config/{{ ansible_facts['pkg_mgr'] }}.yml"
+    - "pkg_mgr_config/{{ ansible_facts['distribution'] }}.yml"
+    - "pkg_mgr_config/{{ ansible_facts['os_family'] }}.yml"
+    - "pkg_mgr_config/default.yml"
   when:
    - proxy.pkg_mgr_proxy | default(false) | lower not in ['false']
