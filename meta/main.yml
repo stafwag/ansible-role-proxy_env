@@ -26,7 +26,7 @@ galaxy_info:
     - name: SLES
       versions:
         - "all"
-    - name: Archlinux
+    - name: ArchLinux
       versions:
         - "all"
     - name: FreeBSD
