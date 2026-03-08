@@ -101,4 +101,4 @@
     - 'pkg_mgr_config/{{ ansible_os_family }}.yml'
     - 'pkg_mgr_config/default.yml'
   when:
-   - proxy.pkg_mgr_proxy | default('false') | bool
+   - proxy.pkg_mgr_proxy | default(false) | lower not in ['false']
