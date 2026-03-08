@@ -1,6 +1,8 @@
+---
 - name: enable proxy in /etc/pacman.conf
   ini_file:
     path: /etc/pacman.conf
+    mode: "644"
     section: options
     option: XferCommand
     value: '/usr/bin/curl -L -C - -f -o %o %u -x {{ proxy.pkg_mgr_proxy }}'
@@ -10,6 +12,7 @@
 - name: disable proxy in /etc/pacman.conf
   ini_file:
     path: /etc/pacman.conf
+    mode: "644"
     section: options
     option: XferCommand
     state: absent

@@ -1,6 +1,8 @@
+---
 - name: enable proxy in /etc/yum.conf
   ini_file:
     path: /etc/yum.conf
+    mode: "644"
     section: main
     option: proxy
     value: '{{ proxy.pkg_mgr_proxy }}'
@@ -10,6 +12,7 @@
 - name: disable proxy in /etc/yum.conf
   ini_file:
     path: /etc/yum.conf
+    mode: "644"
     section: main
     option: proxy
     state: absent
