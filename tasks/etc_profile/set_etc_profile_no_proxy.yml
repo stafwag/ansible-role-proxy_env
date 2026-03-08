@@ -1,11 +1,11 @@
 ---
-- name: set no_proxy in /etc/profile
-  lineinfile:
+- name: Set no_proxy in /etc/profile
+  ansible.builtin.lineinfile:
     path: /etc/profile
-    regexp: '^.*no_proxy.*=.*'
-    line: 'no_proxy={{ proxy.etc_profile_no_proxy }}'
-- name: add export no_proxy to /etc/profile
-  lineinfile:
+    regexp: "^.*no_proxy.*=.*"
+    line: "no_proxy={{ proxy.etc_profile_no_proxy }}"
+- name: Add export no_proxy to /etc/profile
+  ansible.builtin.lineinfile:
     path: /etc/profile
-    regexp: '^.*export no_proxy'
-    line: 'export no_proxy'
+    regexp: "^.*export no_proxy"
+    line: "export no_proxy"

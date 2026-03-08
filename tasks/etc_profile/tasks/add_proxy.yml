@@ -1,10 +1,11 @@
-- name: add proxy to /etc/profile
-  lineinfile:
+---
+- name: Add proxy to /etc/profile
+  ansible.builtin.lineinfile:
     path: /etc/profile
-    regexp: '^.*{{ item }}_proxy.*=.*{{ proxy.etc_profile_proxy }}'
-    line: '{{ item }}_proxy={{ proxy.etc_profile_proxy }}'
-- name: add proxy export to /etc/profile
-  lineinfile:
+    regexp: "^.*{{ item }}_proxy.*=.*{{ proxy.etc_profile_proxy }}"
+    line: "{{ item }}_proxy={{ proxy.etc_profile_proxy }}"
+- name: Add proxy export to /etc/profile
+  ansible.builtin.lineinfile:
     path: /etc/profile
-    regexp: '^.*export {{ item }}_proxy'
-    line: 'export {{ item }}_proxy'
+    regexp: "^.*export {{ item }}_proxy"
+    line: "export {{ item }}_proxy"

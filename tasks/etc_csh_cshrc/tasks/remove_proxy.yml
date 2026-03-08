@@ -1,5 +1,6 @@
-- name: remove proxy to /etc/csh.cshrc
-  lineinfile:
+---
+- name: Remove proxy to /etc/csh.cshrc
+  ansible.builtin.lineinfile:
     path: /etc/csh.cshrc
-    regexp: '^setenv.*{{ item }}_proxy.*'
+    regexp: "^setenv.*{{ item }}_proxy.*"
     state: absent

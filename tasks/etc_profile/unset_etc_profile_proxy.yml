@@ -1,4 +1,4 @@
 ---
 - name: Unset proxy in /etc/profile
-  include_tasks: tasks/remove_proxy.yml
-  with_items: '{{ proxy.protocols | default(_default_protocols) }}'
+  ansible.builtin.include_tasks: tasks/remove_proxy.yml
+  with_items: "{{ proxy.protocols | default(_default_protocols) }}"

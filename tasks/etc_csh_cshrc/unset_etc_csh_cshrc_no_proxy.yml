@@ -1,6 +1,6 @@
 ---
-- name: unset proxy in /etc/csh.cshrc
-  lineinfile:
+- name: Unset proxy in /etc/csh.cshrc
+  ansible.builtin.lineinfile:
     path: /etc/csh.cshrc
-    regexp: '^.*setenv no_proxy.*'
+    regexp: "^.*setenv no_proxy.*"
     state: absent
