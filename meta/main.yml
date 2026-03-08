@@ -1,38 +1,44 @@
 galaxy_info:
   role_name: proxy_env
   author: staf wagemakers <staf@wagemakers.be>
+  namespace: stafwag
   description: An ansible role to setup the proxy settings in shell environments and package managers.
+  company: mask27.dev
+
   license: license (BSD, MIT)
-  min_ansible_version: 2.7
+  min_ansible_version: "2.7"
   platforms:
     - name: EL
       versions:
-        - all
+        - "all"
     - name: Fedora
       versions:
-        - all
+        - "all"
     - name: Debian
       versions:
-        - all
+        - "all"
     - name: Ubuntu
       versions:
-        - all
+        - "all"
     - name: opensuse
       versions:
-        - all
+        - "all"
     - name: SLES
       versions:
-        - all
+        - "all"
     - name: Archlinux
       versions:
-        - all
+        - "all"
     - name: FreeBSD
       versions:
-        - all
+        - "all"
     - name: OpenBSD
       versions:
-        - all
+        - "all"
+
   galaxy_tags:
+    - linux
+    - freebsd
     - system
     - proxy
 dependencies: []
