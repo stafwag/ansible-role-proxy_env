@@ -67,13 +67,13 @@
   include_tasks: setup_etc_profile_proxy.yml
   when:
     - etc_profile.stat.exists
-    - proxy.etc_profile_proxy is defined
+    - proxy.etc_profile_proxy | default(false) | lower not in ['false']
 
 - name: configure /etc/profile
   include_tasks: setup_etc_profile_no_proxy.yml
   when:
     - etc_profile.stat.exists
-    - proxy.etc_profile_no_proxy is defined
+    - proxy.etc_profile_no_proxy | default(false) | lower not in ['false']
 
 - name: verify /etc/csh.cshrc
   stat:
@@ -84,13 +84,13 @@
   include_tasks: setup_etc_csh_cshrc_proxy.yml
   when:
     - etc_csh_cshrc.stat.exists
-    - proxy.etc_csh_cshrc_proxy is defined
+    - proxy.etc_csh_cshrc_proxy | default(false) | lower not in ['false']
 
 - name: configure /etc/csh.cshrc
   include_tasks: setup_etc_csh_cshrc_no_proxy.yml
   when:
     - etc_csh_cshrc.stat.exists
-    - proxy.etc_csh_cshrc_no_proxy is defined
+    - proxy.etc_csh_cshrc_no_proxy | default(false) | lower not in ['false']
 
 - name: execute OS related tasks
   include_tasks: "{{ item }}"
