@@ -1,5 +1,5 @@
 ---
-- name: setup proxy
+- name: Setup proxy
   hosts: all
   become: true
   vars:
