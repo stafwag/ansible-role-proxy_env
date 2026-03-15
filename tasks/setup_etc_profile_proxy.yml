@@ -2,8 +2,8 @@
 - name: Setup proxy in /etc/profile
   ansible.builtin.include_tasks: etc_profile/set_etc_profile_proxy.yml
   when:
-    proxy.etc_profile_proxy != 'absent'
+    proxy.etc_profile_proxy != "absent"
 - name: Remove proxy setup from /etc/profile
   ansible.builtin.include_tasks: etc_profile/unset_etc_profile_proxy.yml
   when:
-    proxy.etc_profile_proxy == 'absent'
+    proxy.etc_profile_proxy == "absent"
