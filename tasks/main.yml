@@ -50,14 +50,14 @@
   register: etc_profile
 
 - name: Debug show etc_profile
-  debug:
+  ansible.builtin.debug:
     var: etc_profile
   tags:
     - never
     - debug
 
 - name: Debug show proxy
-  debug:
+  ansible.builtin.debug:
     var: proxy
   tags:
     - never
@@ -93,7 +93,7 @@
     - proxy.etc_csh_cshrc_no_proxy | default(false) | lower not in ['false']
 
 - name: Show ansible_facts dict
-  debug:
+  ansible.builtin.debug:
     var:
       ansible_facts
   tags:
@@ -109,4 +109,4 @@
     - "pkg_mgr_config/{{ ansible_facts['os_family'] }}.yml"
     - "pkg_mgr_config/default.yml"
   when:
-   - proxy.pkg_mgr_proxy | default(false) | lower not in ['false']
+    - proxy.pkg_mgr_proxy | default(false) | lower not in ['false']
