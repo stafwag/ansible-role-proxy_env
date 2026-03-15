@@ -1,3 +1,4 @@
+---
 - name: Setup proxy in /etc/profile
   ansible.builtin.include_tasks: etc_profile/set_etc_profile_proxy.yml
   when:
