@@ -1,23 +1,24 @@
-- name: add proxy to /etc/apt/apt.conf
-  lineinfile:
+---
+- name: Add proxy to /etc/apt/apt.conf
+  ansible.builtin.lineinfile:
     path: /etc/apt/apt.conf
-    regexp: "^.*Acquire::{{ protocol }}::Proxy.*"
-    line: 'Acquire::{{ protocol }}::Proxy "{{ proxy.pkg_mgr_proxy }}";'
+    regexp: ^.*Acquire::{{ protocol }}::Proxy.*
+    line: Acquire::{{ protocol }}::Proxy "{{ proxy.pkg_mgr_proxy }}";
   with_items:
-    '{{ proxy.protocols | default(_default_protocols) }}'
+    "{{ proxy.protocols | default(_default_protocols) }}"
   loop_control:
     loop_var: protocol
   when:
-    proxy.pkg_mgr_proxy != 'absent'
+    proxy.pkg_mgr_proxy != "absent"
 
-- name: remove proxy from /etc/apt/apt.conf
-  lineinfile:
+- name: Remove proxy from /etc/apt/apt.conf
+  ansible.builtin.lineinfile:
     path: /etc/apt/apt.conf
-    regexp: "^.*Acquire::{{ protocol }}::Proxy.*"
+    regexp: ^.*Acquire::{{ protocol }}::Proxy.*
     state: absent
   with_items:
-    '{{ proxy.protocols | default(_default_protocols) }}'
+    "{{ proxy.protocols | default(_default_protocols) }}"
   loop_control:
     loop_var: protocol
   when:
-    proxy.pkg_mgr_proxy == 'absent'
+    proxy.pkg_mgr_proxy == "absent"
