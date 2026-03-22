@@ -1,26 +1,48 @@
-- name: add proxy to /usr/local/etc/pkg.conf
-  blockinfile:
+---
+- name: Verify if /usr/local/etc/pkg.conf exists
+  ansible.builtin.stat:
+    path: /usr/local/etc/pkg.conf
+  register:
+    etc_local_pkg_conf
+
+- name: Ensure that /usr/local/etc/pkg.conf exists
+  ansible.builtin.file:
+    path: /usr/local/etc/pkg.conf
+    state: touch
+    mode: "0644"
+    owner: root
+    group: wheel
+  when:
+    - proxy.pkg_mgr_proxy != "absent"
+    - not etc_local_pkg_conf.stat.exists
+
+- name: Add proxy to /usr/local/etc/pkg.conf
+  ansible.builtin.blockinfile:
     path: /usr/local/etc/pkg.conf
     block: |
       pkg_env: {
         http_proxy: "{{ proxy.pkg_mgr_proxy }}"
       }
   when:
-    proxy.pkg_mgr_proxy != 'absent'
+    proxy.pkg_mgr_proxy != "absent"
 
-- name: remove proxy from /usr/local/etc/pkg.conf
+- name: Remove proxy from /usr/local/etc/pkg.conf
+  when:
+    - proxy.pkg_mgr_proxy == 'absent'
+    - etc_local_pkg_conf.stat.exists
   block:
-    - lineinfile:
+    - name: Remove http_proxy
+      ansible.builtin.lineinfile:
         path: /usr/local/etc/pkg.conf
         regexp: ".*http_proxy:"
         state: absent
-    - replace:
+    - name: Removed ansible managed header
+      ansible.builtin.replace:
         path: /usr/local/etc/pkg.conf
         regexp: '# BEGIN ANSIBLE MANAGED BLOCK\n*.*pkg_env: {\n*\s*}\s*\n*# END ANSIBLE MANAGED BLOCK'
         replace: ''
-    - replace:
+    - name: Remove pkg_env
+      ansible.builtin.replace:
         path: /usr/local/etc/pkg.conf
         regexp: '.*pkg_env: {\n*\s*}\s*'
         replace: ''
-  when:
-    proxy.pkg_mgr_proxy == 'absent'

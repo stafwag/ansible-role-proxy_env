@@ -1,24 +1,25 @@
-- name: remove proxy from apt.conf
-  lineinfile:
+---
+- name: Remove proxy from apt.conf
+  ansible.builtin.lineinfile:
     path: /etc/apt/apt.conf
     state: absent
     regexp: ^\s*Acquire::http::Proxy
 
-- name: configure /etc/apt/conf.d/99proxy.conf
-  template:
+- name: Configure /etc/apt/conf.d/99proxy.conf
+  ansible.builtin.template:
     src:
       pkg_mgr_config/apt_conf_d/proxy.j2
     dest:
       /etc/apt/apt.conf.d/99proxy.conf
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   when:
-    proxy.pkg_mgr_proxy != 'absent'
+    proxy.pkg_mgr_proxy != "absent"
 
-- name: remove /etc/apt/conf.d/99proxy.conf
-  file:
+- name: Remove /etc/apt/conf.d/99proxy.conf
+  ansible.builtin.file:
     path: /etc/apt/apt.conf.d/99proxy.conf
     state: absent
   when:
-    proxy.pkg_mgr_proxy == 'absent'
+    proxy.pkg_mgr_proxy == "absent"

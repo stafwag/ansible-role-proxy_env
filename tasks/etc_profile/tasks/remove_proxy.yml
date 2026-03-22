@@ -1,0 +1,11 @@
+---
+- name: Remove proxy to /etc/profile
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    regexp: "^.*{{ item }}_proxy.*=.*"
+    state: absent
+- name: Remove proxy export to /etc/profile
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    regexp: "^.*export {{ item }}_proxy"
+    state: absent

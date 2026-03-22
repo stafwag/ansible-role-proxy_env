@@ -1,37 +1,38 @@
-- name: enable proxy in /etc/sysconfig/proxy
-  block:
-  - name: enable proxy for protocols
-    lineinfile:
-      path: /etc/sysconfig/proxy
-      regexp: '^.*{{ protocol| upper }}_PROXY='
-      line: '{{ protocol | upper }}_PROXY="{{ proxy.pkg_mgr_proxy }}"'
-    with_items:
-      '{{ proxy.protocols | default(_default_protocols) }}'
-    loop_control:
-      loop_var: protocol
-  - name: enable proxy in /etc/sysconfig/proxy
-    lineinfile:
-      path: /etc/sysconfig/proxy
-      regexp: '^PROXY_ENABLED='
-      line: 'PROXY_ENABLED="yes"'
+---
+- name: Enable proxy in /etc/sysconfig/proxy
   when:
-    proxy.pkg_mgr_proxy != 'absent'
-
-- name: enable proxy in /etc/sysconfig/proxy
+    proxy.pkg_mgr_proxy != "absent"
   block:
-  - name: disable proxy for protocols
-    lineinfile:
-      path: /etc/sysconfig/proxy
-      regexp: '^.*{{ protocol | upper }}_PROXY='
-      line: '{{ protocol | upper }}_PROXY=""'
-    with_items:
-      '{{ proxy.protocols | default(_default_protocols) }}'
-    loop_control:
-      loop_var: protocol
-  - name: disable proxy in /etc/sysconfig/proxy
-    lineinfile:
-      path: /etc/sysconfig/proxy
-      regexp: '^PROXY_ENABLED='
-      line: 'PROXY_ENABLED="no"'
+    - name: Enable proxy for protocols
+      ansible.builtin.lineinfile:
+        path: /etc/sysconfig/proxy
+        regexp: ^.*{{ protocol | upper }}_PROXY=
+        line: '{{ protocol | upper }}_PROXY="{{ proxy.pkg_mgr_proxy }}"'
+      with_items:
+        "{{ proxy.protocols | default(_default_protocols) }}"
+      loop_control:
+        loop_var: protocol
+    - name: Enable proxy in /etc/sysconfig/proxy
+      ansible.builtin.lineinfile:
+        path: /etc/sysconfig/proxy
+        regexp: ^PROXY_ENABLED=
+        line: PROXY_ENABLED="yes"
+
+- name: Enable proxy in /etc/sysconfig/proxy
   when:
     proxy.pkg_mgr_proxy == 'absent'
+  block:
+    - name: Disable proxy for protocols
+      ansible.builtin.lineinfile:
+        path: /etc/sysconfig/proxy
+        regexp: '^.*{{ protocol | upper }}_PROXY='
+        line: '{{ protocol | upper }}_PROXY=""'
+      with_items:
+        "{{ proxy.protocols | default(_default_protocols) }}"
+      loop_control:
+        loop_var: protocol
+    - name: Disable proxy in /etc/sysconfig/proxy
+      ansible.builtin.lineinfile:
+        path: /etc/sysconfig/proxy
+        regexp: "^PROXY_ENABLED="
+        line: 'PROXY_ENABLED="no"'

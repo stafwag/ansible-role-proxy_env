@@ -1,4 +1,4 @@
 ---
-- name: unset proxy in /etc/csh.cshrc
-  include_tasks: remove_proxy.yml
-  with_items: '{{ proxy.protocols | default(_default_protocols) }}'
+- name: Unset proxy in /etc/csh.cshrc
+  ansible.builtin.include_tasks: tasks/remove_proxy.yml
+  with_items: "{{ proxy.protocols | default(_default_protocols) }}"

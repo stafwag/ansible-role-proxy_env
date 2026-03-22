@@ -1,0 +1,10 @@
+---
+- name: Setup proxy
+  hosts: all
+  become: true
+  vars:
+    proxy:
+      env: http://proxy:3128
+      no_proxy: "mask27.dev,127.0.0.1"
+  roles:
+    - stafwag.proxy_env

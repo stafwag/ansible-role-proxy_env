@@ -1,90 +1,112 @@
 ---
 # tasks file for proxy_env
 
-- name: set _proxy_env
-  set_fact:
-    _proxy_env: '{{ proxy.env | default(false) }}'
+- name: Set _proxy_env
+  ansible.builtin.set_fact:
+    _proxy_env: "{{ proxy.env | default(false) }}"
 
-- name: set _no_proxy
-  set_fact:
-    _no_proxy: '{{ proxy.no_proxy | default(false) }}'
+- name: Set _no_proxy
+  ansible.builtin.set_fact:
+    _no_proxy: "{{ proxy.no_proxy | default(false) }}"
 
-- name: set proxy.no_proxy to default
-  set_fact:
-    proxy: "{{ proxy | combine( { 'no_proxy': _no_proxy  } ) }}"
+- name: Set proxy.no_proxy to default
+  ansible.builtin.set_fact:
+    proxy: "{{ proxy | combine({'no_proxy': _no_proxy}) }}"
   when: proxy.no_proxy is not defined
 
-- name: set protocols to defaults
-  set_fact:
-    proxy: "{{ proxy | combine( { 'protocols': _default_protocols } ) }}"
+- name: Set protocols to defaults
+  ansible.builtin.set_fact:
+    proxy: "{{ proxy | combine({'protocols': _default_protocols}) }}"
   when: proxy.protocols is not defined
 
-- name: set proxy.etc_profile_proxy to default
-  set_fact:
-    proxy: "{{ proxy | combine( { 'etc_profile_proxy': _proxy_env  } ) }}"
+- name: Set proxy.etc_profile_proxy to default
+  ansible.builtin.set_fact:
+    proxy: "{{ proxy | combine({'etc_profile_proxy': _proxy_env}) }}"
   when: proxy.etc_profile_proxy is not defined
 
-- name: set proxy.etc_profile_no_proxy to default
-  set_fact:
-    proxy: "{{ proxy | combine( { 'etc_profile_no_proxy': _no_proxy } ) }}"
+- name: Set proxy.etc_profile_no_proxy to default
+  ansible.builtin.set_fact:
+    proxy: "{{ proxy | combine({'etc_profile_no_proxy': _no_proxy}) }}"
   when: proxy.etc_profile_no_proxy is not defined
 
-- name: set proxy.etc_csh_cshrc_proxy to default
-  set_fact:
-    proxy: "{{ proxy | combine( { 'etc_csh_cshrc_proxy': _proxy_env } ) }}"
+- name: Set proxy.etc_csh_cshrc_proxy to default
+  ansible.builtin.set_fact:
+    proxy: "{{ proxy | combine({'etc_csh_cshrc_proxy': _proxy_env}) }}"
   when: proxy.etc_csh_cshrc_proxy is not defined
 
-- name: set proxy.etc_csh_cshrc_no_proxy to default
-  set_fact:
-    proxy: "{{ proxy | combine( { 'etc_csh_cshrc_no_proxy': _no_proxy } ) }}"
+- name: Set proxy.etc_csh_cshrc_no_proxy to default
+  ansible.builtin.set_fact:
+    proxy: "{{ proxy | combine({'etc_csh_cshrc_no_proxy': _no_proxy}) }}"
   when: proxy.etc_csh_cshrc_no_proxy is not defined
 
-- name: set proxy.pkg_mgr_proxy to default
-  set_fact:
-    proxy: "{{ proxy | combine( { 'pkg_mgr_proxy': _proxy_env } ) }}"
+- name: Set proxy.pkg_mgr_proxy to default
+  ansible.builtin.set_fact:
+    proxy: "{{ proxy | combine({'pkg_mgr_proxy': _proxy_env}) }}"
   when: proxy.pkg_mgr_proxy is not defined
 
-- name: verify /etc/profile
-  stat:
+- name: Verify /etc/profile
+  ansible.builtin.stat:
     path: /etc/profile
   register: etc_profile
 
-- name: configure /etc/profile
-  include_tasks: setup_etc_profile_proxy.yml
+- name: Debug show etc_profile
+  ansible.builtin.debug:
+    var: etc_profile
+  tags:
+    - never
+    - debug
+
+- name: Debug show proxy
+  ansible.builtin.debug:
+    var: proxy
+  tags:
+    - never
+    - debug
+
+- name: Configure /etc/profile
+  ansible.builtin.include_tasks: setup_etc_profile_proxy.yml
   when:
     - etc_profile.stat.exists
-    - proxy.etc_profile_proxy
+    - proxy.etc_profile_proxy | default(false) | lower not in ['false']
 
-- name: configure /etc/profile
-  include_tasks: setup_etc_profile_no_proxy.yml
+- name: Configure /etc/profile
+  ansible.builtin.include_tasks: setup_etc_profile_no_proxy.yml
   when:
     - etc_profile.stat.exists
-    - proxy.etc_profile_no_proxy
+    - proxy.etc_profile_no_proxy | default(false) | lower not in ['false']
 
-- name: verify /etc/csh.cshrc
-  stat:
-     path: /etc/csh.cshrc
+- name: Verify /etc/csh.cshrc
+  ansible.builtin.stat:
+    path: /etc/csh.cshrc
   register: etc_csh_cshrc
 
-- name: configure /etc/csh.cshrc
-  include_tasks: setup_etc_csh_cshrc_proxy.yml
+- name: Configure /etc/csh.cshrc
+  ansible.builtin.include_tasks: setup_etc_csh_cshrc_proxy.yml
   when:
     - etc_csh_cshrc.stat.exists
-    - proxy.etc_csh_cshrc_proxy
+    - proxy.etc_csh_cshrc_proxy | default(false) | lower not in ['false']
 
-- name: configure /etc/csh.cshrc
-  include_tasks: setup_etc_csh_cshrc_no_proxy.yml
+- name: Configure /etc/csh.cshrc
+  ansible.builtin.include_tasks: setup_etc_csh_cshrc_no_proxy.yml
   when:
     - etc_csh_cshrc.stat.exists
-    - proxy.etc_csh_cshrc_no_proxy
+    - proxy.etc_csh_cshrc_no_proxy | default(false) | lower not in ['false']
 
-- name: execute OS related tasks
-  include_tasks: "{{ item }}"
+- name: Show ansible_facts dict
+  ansible.builtin.debug:
+    var:
+      ansible_facts
+  tags:
+    - never
+    - debug
+
+- name: Execute OS related tasks
+  ansible.builtin.include_tasks: "{{ item }}"
   with_first_found:
-    - 'pkg_mgr_config/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
-    - 'pkg_mgr_config/{{ ansible_pkg_mgr }}.yml'
-    - 'pkg_mgr_config/{{ ansible_distribution }}.yml'
-    - 'pkg_mgr_config/{{ ansible_os_family }}.yml'
-    - 'pkg_mgr_config/default.yml'
+    - "pkg_mgr_config/{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
+    - "pkg_mgr_config/{{ ansible_facts['pkg_mgr'] }}.yml"
+    - "pkg_mgr_config/{{ ansible_facts['distribution'] }}.yml"
+    - "pkg_mgr_config/{{ ansible_facts['os_family'] }}.yml"
+    - "pkg_mgr_config/default.yml"
   when:
-   - proxy.pkg_mgr_proxy
+    - proxy.pkg_mgr_proxy | default(false) | lower not in ['false']

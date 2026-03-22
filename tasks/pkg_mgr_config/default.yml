@@ -1,3 +1,4 @@
-- name: print the default message
-  debug:
+---
+- name: Print the default message
+  ansible.builtin.debug:
     msg: 'No support to configure {{ ansible_pkg_mgr }} on {{ ansible_distribution }}'
