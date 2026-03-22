@@ -43,7 +43,7 @@ None
 ### Configure the proxy environment
  
 ```
-- name: setup proxy on internal hosts
+- name: Setup proxy on internal hosts
   hosts: all:!dmz:!k8s
   become: true
   vars:
@@ -56,7 +56,7 @@ None
 ### Configure the proxy in the pkg_mgr, and remove it from the shell environment.
 
 ```
-- name: setup proxy on k8s hosts
+- name: Setup proxy on k8s hosts
   hosts: k8s
   become: true
   vars:
@@ -71,7 +71,7 @@ None
 ### Remove the proxy settings
 
 ```
-- name: setup proxy
+- name: Setup proxy
   hosts: all
   become: true
   vars:
@@ -87,4 +87,5 @@ MIT/BSD
 
 ## Author Information
 
-Created by Staf Wagemakers, email: staf@wagemakers.be, website: http://www.wagemakers.be.
+Created by Staf Wagemakers, email: staf@wagemakers.be, website: [https://www.wagemakers.be](https://www.wagemakers.be),
+my company: [https://mask27.dev](https://mask27.dev)
