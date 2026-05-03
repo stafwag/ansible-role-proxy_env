@@ -1,5 +1,6 @@
 # Ansible Role: proxy env
-An ansible role to setup the proxy environment in shell environment ( /etc/profile & /etc/csh_cshrc ) and the package manager. The following package managers are supported:
+
+An Ansible role to set up the proxy environment in the shell environment ( /etc/profile & /etc/csh_cshrc ) and the package manager. The following package managers are supported:
 
 * apt
 * pacman
