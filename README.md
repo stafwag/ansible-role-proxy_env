@@ -1,16 +1,52 @@
 # Ansible Role: proxy env
 
-An Ansible role to set up the proxy environment in the shell environment ( /etc/profile & /etc/csh_cshrc ) and the package manager. The following package managers are supported:
+An Ansible role to set up the proxy environment in the shell environment ( /etc/profile & /etc/csh_cshrc ) and the package manager.
+
+## Supported systems
+
+The following systems, package managers are supported.
+
+### Systems
+
+Most Un!x system are supported.
+
+### Package managers
 
 * apt
+* dnf/dnf5
 * pacman
-* pkgng
+* pkgng (FreeBSD)
 * Suse (on Suse /etc/sysconfig/proxy is configured)
 * yum
  
 ## Requirements
 
 None
+
+## Installation
+
+### Ansible galaxy
+
+The role is available on [Ansible Galaxy](https://galaxy.ansible.com/ui/standalone/roles/stafwag/proxy_env).
+
+To install the role from Ansible Galaxy execute the command below.
+
+```bash
+$ ansible-galaxy role install stafwag.proxy_env
+```
+
+## Source Code
+
+If you want to use the source code directly.
+
+Clone the role source code.
+
+```bash
+$ git clone https://github.com/stafwag/ansible-role-proxy_env stafwag.proxy_env
+```
+
+and put it into the [role search path](https://docs.ansible.com/ansible/2.4/playbooks_reuse_roles.html#role-search-path)
+
 
 ## Role Variables
 
