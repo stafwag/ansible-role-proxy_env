@@ -1,0 +1,20 @@
+---
+- name: Enable proxy in /etc/dnf/dnf.conf
+  community.general.ini_file:
+    path: /etc/dnf/dnf.conf
+    mode: "644"
+    section: main
+    option: proxy
+    value: "{{ proxy.pkg_mgr_proxy }}"
+  when:
+    proxy.pkg_mgr_proxy != 'absent'
+
+- name: Disable proxy in /etc/dnf/dnf.conf
+  community.general.ini_file:
+    path: /etc/dnf/dnf.conf
+    mode: "644"
+    section: main
+    option: proxy
+    state: absent
+  when:
+    proxy.pkg_mgr_proxy == 'absent'
